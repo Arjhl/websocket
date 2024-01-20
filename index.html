@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="something">Send</button>
+</body>
+<script>
+    let ws;
+    closeConnection()
+    
+     ws = new WebSocket("ws://localhost:8080",["123"])
+    let i = 0;
+
+   function closeConnection() {
+        if (!!ws) {
+            ws.close();
+        }
+    }
+
+    ws.onopen = function(e){
+        // closeConnection()
+            ws.send("connection established",{
+                Headers:{
+                    "Authorization":"123"
+                }
+            })
+        
+        }
+
+    ws.onmessage = function(msg){
+        if(msg.data === "close"){
+            ws.close();
+            return;
+        }
+        console.log(msg.data)
+    }
+    ws.addEventListener("json",(data)=>{
+        console.log(data)
+    })
+
+    document.getElementById("something").addEventListener("click", function(){
+       ws.send("something!");
+    });
+
+
+
+
+</script>
+</html>
